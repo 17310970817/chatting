@@ -18,33 +18,29 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-    }
-    public class Msg{
-        public static final int TYPE_RECEIVED=0;
-        public static final int TYPE_SENT=1;
-        private String content;
-        private int type;
-        public Msg(String content,int type){
-            this.content=content;
-            this.type=type;
-        }
 
-        public int getType() {
-            return type;
-        }
 
-        public String getContent() {
-            return content;
-        }
-    }
 
     public class MainActivity extends AppCompatActivity{
+        public class Msg{
+            public static final int TYPE_RECEIVED=0;
+            public static final int TYPE_SENT=1;
+            private String content;
+            private int type;
+            public Msg(String content,int type){
+                this.content=content;
+                this.type=type;
+            }
+
+            public int getType() {
+                return type;
+            }
+
+            public String getContent() {
+                return content;
+            }
+        }
         private List<Msg> msgList=new ArrayList<>();
         private EditText inputText;
         private Button send;
