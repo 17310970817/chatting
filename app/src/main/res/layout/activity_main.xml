@@ -35,7 +35,7 @@
     android:layout_height="39dp" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/msg_recycler_view"
         android:layout_width="427dp"
         android:layout_height="950dp"
@@ -44,5 +44,6 @@
         android:layout_marginStart="-16dp"
         android:layout_marginTop="-219dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="-16dp" />
+        android:layout_marginLeft="-16dp">
+    </androidx.recyclerview.widget.RecyclerView>
 </RelativeLayout>
