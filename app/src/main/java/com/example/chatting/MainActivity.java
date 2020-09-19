@@ -1,87 +1,60 @@
 package com.example.chatting;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
+public class MainActivity extends AppCompatActivity {
+    private List<Msg> msgList = new ArrayList<>();                                //声明List变量
+    private EditText editText;                                                  //声明EdiText类变量
+    private Button send;                                                        //声明Button类变量
+    private RecyclerView recyclerView;                                          //声明recyclerView类变量
+    private MsgAdapter adapter;                                                  //声明adapter类变量
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initMsgs();                                                             //初始化数据
 
+        editText = (EditText) findViewById(R.id.input_Text);                     //获取组建，赋值给editText类变量
+        send = (Button) findViewById(R.id.send_mess);                            //获取组建，赋值给send类变量
+        recyclerView = (RecyclerView) findViewById(R.id.msg_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));           //创建显示方式
+        adapter = new MsgAdapter(msgList);
 
-
-    public class MainActivity extends AppCompatActivity{
-        public class Msg{
-            public static final int TYPE_RECEIVED=0;
-            public static final int TYPE_SENT=1;
-            private String content;
-            private int type;
-            public Msg(String content,int type){
-                this.content=content;
-                this.type=type;
-            }
-
-            public int getType() {
-                return type;
-            }
-
-            public String getContent() {
-                return content;
-            }
-        }
-        private List<Msg> msgList=new ArrayList<>();
-        private EditText inputText;
-        private Button send;
-        private RecyclerView msgRecyclerView;
-        private MsgAdapter adapter;
-        @Override
-        protected void onCreate (Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-            initMsgs();
-            inputText = (EditText) findViewById(R.id.input_text);
-            send = (Button) findViewById(R.id.send);
-            msgRecyclerView = (RecyclerView) findViewById(R.id.msg_recycler_view);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            msgRecyclerView.setLayoutManager(layoutManager);
-            adapter = new MsgAdapter(msgList) {
-                @Override
-                public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());   //设置一个GridLayoutManager，图标形式显示，参数一 上下文，参数二，要分成几列显示
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);                         //是横向显示还是纵向显示，两种选项HORIZONTAL,VERTICAL
+        recyclerView.setAdapter(adapter);                                                           //给recyclerView设置 adapter事件
+        send.setOnClickListener(new View.OnClickListener() {                                        //btn发送消息
+            @Override
+            public void onClick(View v) {
+                String content = editText.getText().toString();                       //获取editext内容
+                if (!"".equals(content))                                             //判断context是否是“”,或null
+                {
+                    Msg msg = new Msg(content, Msg.TYPE_SENT_FC);
+                    msgList.add(msg);
+                    adapter.notifyItemInserted(msgList.size() - 1);                   //有消息刷新显示
+                    recyclerView.scrollToPosition(msgList.size() - 1);                    //将list定位到最后一行
+                    editText.setText("");
                 }
-            };
-            msgRecyclerView.setAdapter(adapter);
-            send.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    String content = inputText.getText().toString();
-                    if (!"".equals(content)) {
-                        Msg msg = new Msg(content, Msg.TYPE_SENT);
-                        msgList.add(msg);
-                        adapter.notifyItemInserted(msgList.size() - 1);
-                        msgRecyclerView.scrollToPosition(msgList.size() - 1);
-                        inputText.setText("");
-                    }
-                }
-            });
-        }
-     private void initMsgs(){
-            Msg msg1=new Msg("陈冯缘是爸爸",Msg.TYPE_RECEIVED);
-            msgList.add(msg1);
-            Msg msg2=new Msg("刘奕苇是臭狗屎",Msg.TYPE_SENT);
-            msgList.add(msg2);
-     }
+            }
+        });
     }
+
+    private void initMsgs() {
+        Msg msg1=new Msg("你好",Msg.TYPE_RECEIVED_SD);
+        msgList.add(msg1);
+        Msg msg2=new Msg("你好!",Msg.TYPE_SENT_FC);
+        msgList.add(msg2);
+    }
+
 }
